@@ -210,6 +210,15 @@ export function createMessenger({ database = join(here, 'data', 'volna.sqlite') 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const server = createMessenger({ database: process.env.VOLNA_DATABASE || undefined });
   const port = Number(process.env.PORT || 8787);
+  server.on('error', error => {
+    if (error.code === 'EADDRINUSE') {
+      console.error(`Port ${port} is already in use. Volna may already be running: http://localhost:${port}`);
+      console.error('Check /health or use Start-Server.cmd, which detects an existing Volna server.');
+    } else {
+      console.error(`Cannot start Volna: ${error.code || error.message}`);
+    }
+    process.exitCode = 1;
+  });
   server.listen(port, process.env.HOST || '0.0.0.0', () => {
     console.log(`Volna: http://localhost:${port}`);
     for (const entries of Object.values(networkInterfaces())) for (const entry of entries || []) {
