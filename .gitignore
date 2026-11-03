@@ -1,0 +1,8 @@
+server/data/
+build/
+dist/
+*.xcuserstate
+xcuserdata/
+.DS_Store
+node_modules/
+*.log
