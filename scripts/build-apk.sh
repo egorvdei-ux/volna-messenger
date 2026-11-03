@@ -15,7 +15,7 @@ java -cp "$BUILD/tests" ServerAddressTest
 "$TOOLS/aapt2" link -o "$BUILD/resources.apk" --manifest android/app/src/main/AndroidManifest.xml \
   -I "$PLATFORM" --java "$BUILD/generated" --auto-add-overlay "$BUILD/resources.zip"
 find android/app/src/main/java "$BUILD/generated" -name '*.java' > "$BUILD/sources.txt"
-javac -encoding UTF-8 -source 8 -target 8 -bootclasspath "$PLATFORM" -d "$BUILD/classes" @"$BUILD/sources.txt"
+javac -encoding UTF-8 --release 8 -classpath "$PLATFORM" -d "$BUILD/classes" @"$BUILD/sources.txt"
 jar cf "$BUILD/classes.jar" -C "$BUILD/classes" .
 "$TOOLS/d8" --release --min-api 26 --lib "$PLATFORM" --output "$BUILD/dex" "$BUILD/classes.jar"
 cp "$BUILD/resources.apk" "$BUILD/unpacked.apk"
